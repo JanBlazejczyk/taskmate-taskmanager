@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>To do List Manager - Taskmate</title>
+{% endblock title %}
+
+{% block content %}
+    <div class='container'>
+    <br>
+
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+        {% endif %}
+    
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control" name='task' placeholder="New Task?">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+
+
+    <!--First table row needs to be outside of the loop-->
+    <table class="table">
+        <thead class="table">
+            <tr>
+                <th scope="col">Task</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        <!--For loop starts here and will iterate through the row part-->
+        <!--all_tasks is a dictionary defined in views.py-->
+        {% if all_tasks %}
+            {% for obj in all_tasks %}
+                {% if obj.done %}
+                    <tr class="table-success">
+                        <td>{{ obj.id }} | {{ obj.task }}</td>
+                        <td>Completed! <a href="{% url 'change_status' obj.id %}">Unmark?</a></td>
+                        <td><a href="{% url 'edit_task' obj.id %}">Edit</a></td>
+                        <td><a href="{% url 'delete_task' obj.id %}">Delete</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ obj.id }} | {{ obj.task }}</td>
+                        <td><a href="{% url 'change_status' obj.id %}">Mark as Done</a></td>
+                        <td><a href="{% url 'edit_task' obj.id %}">Edit</a></td>
+                        <td><a href="{% url 'delete_task' obj.id %}">Delete</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}
