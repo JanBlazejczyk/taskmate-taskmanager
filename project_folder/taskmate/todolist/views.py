@@ -32,6 +32,15 @@ def landing_page(request):
         return render(request, 'todolist.html', {'all_tasks': all_tasks})
 
 
+def home(request):
+
+    context = {
+        'home_text': 'Welcome to the Home Page',
+    }
+
+    return render(request, 'home.html', context)
+
+
 def edit_task(request, task_id):
     if request.method == 'POST':
         # we select a task to edit
