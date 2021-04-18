@@ -24,7 +24,7 @@ def landing_page(request):
     else:
         all_tasks = TaskList.objects.all()
         # dzielimy all tasks po 5 na stronę
-        paginator = Paginator(all_tasks, 5)
+        paginator = Paginator(all_tasks, 6)
         # w get request parameter pg pojawia się w linku
         page = request.GET.get('pg')
         all_tasks = paginator.get_page(page)
