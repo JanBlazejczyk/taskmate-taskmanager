@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from todolist.models import TaskList
 from todolist.forms import TaskForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -21,7 +22,12 @@ def landing_page(request):
         return redirect('landing_page')
 
     else:
-        all_tasks = TaskList.objects.all
+        all_tasks = TaskList.objects.all()
+        # dzielimy all tasks po 5 na stronę
+        paginator = Paginator(all_tasks, 5)
+        # w get request parameter pg pojawia się w linku
+        page = request.GET.get('pg')
+        all_tasks = paginator.get_page(page)
 
         return render(request, 'todolist.html', {'all_tasks': all_tasks})
 
