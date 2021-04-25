@@ -4,11 +4,12 @@ from todolist.models import TaskList
 from todolist.forms import TaskForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def landing_page(request):
-
     if request.method == "POST":
         # connecting to the form
         # form checks if the field is empty or not and passes request.POST or None
@@ -20,7 +21,6 @@ def landing_page(request):
         messages.success(request, 'Task added successfully')
 
         return redirect('landing_page')
-
     else:
         all_tasks = TaskList.objects.all()
         # dzielimy all tasks po 5 na stronę
@@ -33,14 +33,13 @@ def landing_page(request):
 
 
 def home(request):
-
     context = {
         'home_text': 'Welcome to the Home Page',
     }
-
     return render(request, 'home.html', context)
 
 
+@login_required
 def edit_task(request, task_id):
     if request.method == 'POST':
         # we select a task to edit
@@ -53,7 +52,6 @@ def edit_task(request, task_id):
         messages.success(request, 'Task edited')
 
         return redirect('landing_page')
-
     else:
         task_obj = TaskList.objects.get(pk=task_id)
 
@@ -61,33 +59,29 @@ def edit_task(request, task_id):
 
 
 def contact(request):
-
     context = {
         'contact_text': 'Welcome to the Contact Page',
     }
-
     return render(request, 'contact.html', context)
 
 
 def about(request):
-
     context = {
         'about_text': 'Welcome to the About Page',
     }
-
     return render(request, 'about.html', context)
 
 
+@login_required
 def delete_task(request, task_id):
-
     task = TaskList.objects.get(pk=task_id)
     task.delete()
 
     return redirect('landing_page')
 
 
+@login_required
 def change_status(request, task_id):
-
     task = TaskList.objects.get(pk=task_id)
 
     if task.done == False:

@@ -23,7 +23,11 @@
                 <center><p class="h1">Don't get lost in your day anymore!</p></center>
                 <center><p class="h2">No matter where you are, get organized</p></center>
                 <center><p class="h5">With TaskMate you can accomplish anything</p></center>
-                <center><a href="{% url 'landing_page' %}"><button type="button" class="btn btn-primary btn-lg mt-2">Get Started</button></a></center>
+                {% if user.is_authenticated %}
+                    <center><a href="{% url 'landing_page' %}"><button type="button" class="btn btn-primary btn-lg mt-2">Get Started</button></a></center>
+                {% else %}
+                    <center><a href="{% url 'login' %}"><button type="button" class="btn btn-primary btn-lg mt-2">Get Started</button></a></center>
+                {% endif %}
             </div>
         </div>
 
