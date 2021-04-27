@@ -16,13 +16,18 @@ def landing_page(request):
         form = TaskForm(request.POST or None)
         # checking if the data we are provided with are valid
         if form.is_valid():
-            form.save()
+            # save value into instance
+            instance = form.save(commit=False)
+            # connect to the owner of instance and set it as a user
+            instance.owner = request.user
+            # then save instance with a user
+            instance.save()
 
         messages.success(request, 'Task added successfully')
 
         return redirect('landing_page')
     else:
-        all_tasks = TaskList.objects.all()
+        all_tasks = TaskList.objects.filter(owner=request.user)
         # dzielimy all tasks po 5 na stronę
         paginator = Paginator(all_tasks, 6)
         # w get request parameter pg pojawia się w linku
