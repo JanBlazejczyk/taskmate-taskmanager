@@ -79,8 +79,11 @@ def about(request):
 
 @login_required
 def delete_task(request, task_id):
-    task = TaskList.objects.get(pk=task_id)
-    task.delete()
+    if task.owner == request.user:
+        task = TaskList.objects.get(pk=task_id)
+        task.delete()
+    else:
+        messages.error(request, "Access denied. Operation forbidden")
 
     return redirect('landing_page')
 
@@ -89,11 +92,14 @@ def delete_task(request, task_id):
 def change_status(request, task_id):
     task = TaskList.objects.get(pk=task_id)
 
-    if task.done == False:
-        task.done = True
-        task.save()
+    if task.owner == request.user:
+        if task.done == False:
+            task.done = True
+            task.save()
+        else:
+            task.done = False
+            task.save()
     else:
-        task.done = False
-        task.save()
+        messages.error(request, 'Access denied, operation forbidden')
 
-    return redirect('landing_page')
+        return redirect('landing_page')

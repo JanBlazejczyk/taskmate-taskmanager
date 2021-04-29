@@ -10,6 +10,7 @@
         <h1>Edit Task: {{ task_obj.task }}</h1>
         <br>
 
+        {% if task_obj.owner == request.user %}
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -24,6 +25,9 @@
                 </div>
             </div>
         </form>
+        {% else %}
+            <p>Operation not allowed!</p>
+        {% endif %}
 
     </div>
 {% endblock content %}
