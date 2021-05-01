@@ -13,7 +13,8 @@ class TaskList(models.Model):
     # here we say that an owner is a User that creates the task
     # and that all the tasks created by the user needs to be deleted
     # if we delete a user
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, default='')
 
     def __str__(self):
         return self.task + ' - ' + str((self.done))
